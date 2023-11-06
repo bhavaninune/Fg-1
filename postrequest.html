@@ -1,6 +1,6 @@
 <html>
     <body>
-        <form onsubmit="saveToLoaclStorage(event)">
+        <form onsubmit="saveToLocalStorage(event)">
             <label for="name">Enter name</label>
             <input type="text" id="username" value="">
             <label for="email">Enter email</label>
@@ -31,16 +31,18 @@ function saveToLocalStorage(event) {
   //localStorage.setItem(obj.email, JSON.stringify(obj));
 
   axios
-    .post("https://crudcrud.com/api/4af8490972764541a27d80ba3e0f80dd/appointmentdata", obj)
+    .get("https://crudcrud.com/api/4af8490972764541a27d80ba3e0f80dd/appointmentdata", obj)
     .then((response) => {
       
-  showNewUserOnScreen(obj);
+  console.log(response);
+  for(var i=0;i<response.length;i++)
+  {
+    showNewUserOnScreen(response.data[i])
+  }
     })
     .catch((err) => {
       console.log(err);
     });
-
-  
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -52,4 +54,21 @@ window.addEventListener("DOMContentLoaded", () => {
     showNewUserOnScreen(userDetailsObj);
   }
 });
+function showNewUserOnScreen(userDetailsObj) {
+  // Create a new element to display the user details
+  const newUserElement = document.createElement("div");
+  newUserElement.classList.add("new-user");
+
+  // Add the user details to the element
+  newUserElement.innerHTML = `
+    <h3>${userDetailsObj.name}</h3>
+    <p>${userDetailsObj.email}</p>
+    <p>${userDetailsObj.phonenumber}</p>
+  `;
+
+  // Append the element to the body of the document
+  document.body.appendChild(newUserElement);
+}
+
+
 </script>
